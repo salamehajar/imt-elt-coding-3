@@ -152,3 +152,38 @@ class TestTransformOrders:
         # TODO: Test that NULL coupon_code values are replaced with ""
         # Hint: result["coupon_code"].notna().all()
         pass
+
+
+# =============================================================================
+# TODO (Step 3.3): Complete the error handling tests below
+# =============================================================================
+
+class TestTransformErrorHandling:
+    """
+    Tests for error handling (Step 3).
+
+    Here we use side_effect=Exception(...) to simulate a database failure.
+    Instead of returning fake data, mock_read will RAISE an exception.
+    We then verify with pytest.raises() that the exception is propagated.
+    """
+
+    @patch("src.transform._load_to_silver")
+    @patch("src.transform._read_bronze", side_effect=Exception("DB connection failed"))
+    def test_transform_products_propagates_error(self, mock_read, mock_load):
+        # TODO: Verify that transform_products() re-raises the exception
+        # Hint: use pytest.raises(Exception, match="DB connection failed")
+        #   with pytest.raises(Exception, match="DB connection failed"):
+        #       transform_products()
+        pass
+
+    @patch("src.transform._load_to_silver")
+    @patch("src.transform._read_bronze", side_effect=Exception("DB connection failed"))
+    def test_transform_users_propagates_error(self, mock_read, mock_load):
+        # TODO: Same pattern for transform_users()
+        pass
+
+    @patch("src.transform._load_to_silver")
+    @patch("src.transform._read_bronze", side_effect=Exception("DB connection failed"))
+    def test_transform_orders_propagates_error(self, mock_read, mock_load):
+        # TODO: Same pattern for transform_orders()
+        pass
