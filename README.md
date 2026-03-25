@@ -72,3 +72,72 @@ python pipeline.py
 - **SQLAlchemy** : ORM / PostgreSQL connection
 - **PostgreSQL** (AWS RDS) : Database
 - **pytest** : Testing (TP2)
+
+## 🧭 Business Context
+
+KICKZ EMPIRE is an e-commerce platform that needs trustworthy analytics for operations and decision-making.
+This ELT pipeline centralizes data from source files, standardizes quality in a layered warehouse model,
+and exposes business-ready aggregates for dashboards (revenue, product performance, customer value).
+
+## ▶️ Run Options
+
+Run full pipeline:
+
+```bash
+python pipeline.py
+```
+
+Run a single step:
+
+```bash
+python pipeline.py --step extract
+python pipeline.py --step transform
+python pipeline.py --step gold
+```
+
+After execution, a monitoring report is generated in:
+
+```text
+pipeline_report.json
+```
+
+## 🧪 Testing
+
+Run all tests:
+
+```bash
+pytest
+```
+
+Run tests with coverage:
+
+```bash
+pytest --cov=src --cov-report=term-missing
+```
+
+Run tests per module:
+
+```bash
+pytest tests/test_extract.py
+pytest tests/test_transform.py
+pytest tests/test_gold.py
+```
+
+## 👥 Team Members
+
+- Khaoula AROUISSI
+- Safaa MAHDIR
+- Hajar SALAME
+
+## 🛡️ Production Checklist
+
+- [x] `.gitignore` includes `.env`, `__pycache__/`, `venv/`, `*.pyc`
+- [x] `requirements.txt` uses pinned versions
+- [x] README includes setup, run, test, and architecture sections
+- [ ] Run formatter before release:
+
+```bash
+python -m black src pipeline.py
+```
+
+- [x] No hardcoded credentials should be committed
