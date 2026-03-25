@@ -55,7 +55,7 @@ def get_logger(name: str) -> logging.Logger:
         handler = logging.StreamHandler()
         # Set its formatter to JSONFormatter()
         handler.setFormatter(JSONFormatter())
-        #Add the handler to the logger
+        # Add the handler to the logger
         logger.addHandler(handler)
         # Set the logger level to logging.DEBUG
         logger.setLevel(logging.DEBUG)

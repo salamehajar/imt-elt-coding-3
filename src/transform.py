@@ -8,6 +8,7 @@ from sqlalchemy import text
 from src.database import get_engine, BRONZE_SCHEMA, SILVER_SCHEMA
 
 from src.logger import get_logger
+
 logger = get_logger(__name__)
 
 
@@ -26,7 +27,9 @@ def _drop_internal_columns(df: pd.DataFrame) -> pd.DataFrame:
     #        3. Print how many were removed, then return
     internal_cols = [col for col in df.columns if col.startswith("_")]
     df = df.drop(columns=internal_cols)
-    logger.info(f"    🧹 {len(internal_cols)} internal columns removed: {internal_cols}")
+    logger.info(
+        f"    🧹 {len(internal_cols)} internal columns removed: {internal_cols}"
+    )
     return df
 
 
@@ -53,8 +56,8 @@ def transform_products() -> pd.DataFrame:
     #       except Exception as e:
     #           logger.error(f"Failed to transform products: {e}")
     #           raise   ← re-raise so the caller knows it failed
-    
-    try : 
+
+    try:
         logger.info("  📦 Transform: products → dim_products")
         df = _read_bronze("products")
 
@@ -74,7 +77,9 @@ def transform_products() -> pd.DataFrame:
         invalid_prices = df[df["price_usd"] <= 0]
         if len(invalid_prices) > 0:
             # TODO (TP3): Replace with logger.warning(...)
-            logger.warning(f"    ⚠️  {len(invalid_prices)} products with price <= 0 (removed)")
+            logger.warning(
+                f"    ⚠️  {len(invalid_prices)} products with price <= 0 (removed)"
+            )
         df = df[df["price_usd"] > 0]
 
         # TODO: Step 4 — Convert boolean columns (is_active, is_hype_product)
@@ -96,8 +101,8 @@ def transform_products() -> pd.DataFrame:
 def transform_users() -> pd.DataFrame:
     """Transform bronze.users → silver.dim_users."""
     # TODO (TP3): Same pattern — replace print with logger.info, add try/except + logger.error + raise
-    
-    try :
+
+    try:
         logger.info("  👤 Transform: users → dim_users")
         df = _read_bronze("users")
 
@@ -118,7 +123,7 @@ def transform_users() -> pd.DataFrame:
         # 4. Load into Silver
         _load_to_silver(df, "dim_users")
         return df
-    
+
     except Exception as e:
         logger.error(f"Failed to transform users: {e}")
         raise
@@ -128,7 +133,7 @@ def transform_orders() -> pd.DataFrame:
     """Transform bronze.orders → silver.fct_orders."""
     # TODO (TP3): Same pattern — replace print with logger.info, add try/except + logger.error + raise
 
-    try :
+    try:
         logger.info("  🛍️ Transform: orders → fct_orders")
         df = _read_bronze("orders")
 
@@ -140,11 +145,20 @@ def transform_orders() -> pd.DataFrame:
         # Only keep rows with a valid status. The valid set is in the docstring above.
         # Look at: .isin() and boolean indexing
         # 2. Validate statuses
-        VALID_STATUSES = {"delivered", "shipped", "processing", "returned", "cancelled", "chargeback"}
+        VALID_STATUSES = {
+            "delivered",
+            "shipped",
+            "processing",
+            "returned",
+            "cancelled",
+            "chargeback",
+        }
         invalid = df[~df["status"].isin(VALID_STATUSES)]
         if len(invalid) > 0:
             # TODO (TP3): Replace with logger.warning(...)
-            logger.warning(f"    ⚠️  {len(invalid)} orders with invalid status (removed)")
+            logger.warning(
+                f"    ⚠️  {len(invalid)} orders with invalid status (removed)"
+            )
             df = df[df["status"].isin(VALID_STATUSES)]
 
         # TODO: Step 3 — Convert order_date to a proper datetime type
@@ -161,7 +175,7 @@ def transform_orders() -> pd.DataFrame:
         # 5. Load into Silver
         _load_to_silver(df, "fct_orders")
         return df
-    
+
     except Exception as e:
         logger.error(f"Failed to transform orders: {e}")
         raise
@@ -170,7 +184,7 @@ def transform_orders() -> pd.DataFrame:
 def transform_order_line_items() -> pd.DataFrame:
     """Transform bronze.order_line_items → silver.fct_order_lines."""
     # TODO (TP3): Same pattern — replace print with logger.info, add try/except + logger.error + raise
-    try :
+    try:
         logger.info("  📋 Transform: order_line_items → fct_order_lines")
         df = _read_bronze("order_line_items")
 
@@ -183,7 +197,9 @@ def transform_order_line_items() -> pd.DataFrame:
         invalid_qty = df[df["quantity"] <= 0]
         if len(invalid_qty) > 0:
             # TODO (TP3): Replace with logger.warning(...)
-            logger.warning(f"    ⚠️  {len(invalid_qty)} rows with quantity <= 0 (removed)")
+            logger.warning(
+                f"    ⚠️  {len(invalid_qty)} rows with quantity <= 0 (removed)"
+            )
         df = df[df["quantity"] > 0]
 
         # TODO: Step 3 — Verify line_total_usd ≈ unit_price_usd * quantity
@@ -222,7 +238,9 @@ def transform_all() -> dict[str, pd.DataFrame]:
     results["fct_orders"] = transform_orders()
     results["fct_order_lines"] = transform_order_line_items()
 
-    logger.info(f"\n  ✅ Transformation complete — {len(results)} tables in {SILVER_SCHEMA}")
+    logger.info(
+        f"\n  ✅ Transformation complete — {len(results)} tables in {SILVER_SCHEMA}"
+    )
     return results
 
 

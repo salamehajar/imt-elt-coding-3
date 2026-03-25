@@ -9,6 +9,7 @@ from src.database import get_engine, SILVER_SCHEMA, GOLD_SCHEMA
 
 # TODO (TP3): Import your logger and create a module-level logger
 from src.logger import get_logger
+
 logger = get_logger(__name__)
 
 
@@ -78,7 +79,6 @@ def create_daily_revenue():
         raise
 
 
-
 def create_product_performance():
     """Create gold.product_performance — metrics per product."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
@@ -88,7 +88,7 @@ def create_product_performance():
     # Join fct_order_lines with dim_products (and filter via fct_orders)
     # Group by product_id + product details, aggregate sales metrics
     # See the expected columns in the docstring above
-    try : 
+    try:
         query = f"""
             SELECT
                 ol.product_id,
@@ -122,7 +122,7 @@ def create_customer_ltv():
     # Join fct_orders with dim_users
     # Group by customer, compute the aggregates listed in the docstring
     # Hint: MIN/MAX for dates, EXTRACT(DAY FROM ...) for tenure
-    try :
+    try:
         query = f"""
             SELECT
                 u.user_id,

@@ -14,6 +14,7 @@ from sqlalchemy import text
 from src.database import get_engine, BRONZE_SCHEMA
 
 from src.logger import get_logger
+
 logger = get_logger(__name__)
 
 S3_BUCKET = os.getenv("S3_BUCKET_NAME", "kickz-empire-data")
@@ -106,7 +107,7 @@ def _load_to_bronze(df: pd.DataFrame, table_name: str, if_exists: str = "replace
 def extract_products() -> pd.DataFrame:
     """Extract the product catalog from S3 → bronze.products."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
-    try : 
+    try:
         df = _read_csv_from_s3(f"{S3_PREFIX}/catalog/products.csv")
         # print(f"  📦 Products: {len(df)} rows, {len(df.columns)} columns")
         logger.info(f"  📦 Products: {len(df)} rows, {len(df.columns)} columns")
@@ -120,7 +121,7 @@ def extract_products() -> pd.DataFrame:
 def extract_users() -> pd.DataFrame:
     """Extract users from S3 → bronze.users."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
-    try :
+    try:
         df = _read_csv_from_s3(f"{S3_PREFIX}/users/users.csv")
         # print(f"  👤 Users: {len(df)} rows, {len(df.columns)} columns")
         logger.info(f"  👤 Users: {len(df)} rows, {len(df.columns)} columns")
@@ -134,7 +135,7 @@ def extract_users() -> pd.DataFrame:
 def extract_orders() -> pd.DataFrame:
     """Extract orders from S3 → bronze.orders."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
-    try :
+    try:
         df = _read_csv_from_s3(f"{S3_PREFIX}/orders/orders.csv")
         # print(f"  🛍️ Orders: {len(df)} rows, {len(df.columns)} columns")
         logger.info(f"  🛍️ Orders: {len(df)} rows, {len(df.columns)} columns")
@@ -143,7 +144,6 @@ def extract_orders() -> pd.DataFrame:
     except Exception as e:
         logger.error(f"Error extracting orders: {e}")
         raise
-    
 
 
 def extract_order_line_items() -> pd.DataFrame:
@@ -212,7 +212,9 @@ def extract_all() -> dict[str, pd.DataFrame]:
     results["clickstream"] = extract_clickstream()
 
     # print(f"\n  ✅ Extraction complete — {len(results)} tables loaded into {BRONZE_SCHEMA}")
-    logger.info(f"\n  ✅ Extraction complete — {len(results)} tables loaded into {BRONZE_SCHEMA}")
+    logger.info(
+        f"\n  ✅ Extraction complete — {len(results)} tables loaded into {BRONZE_SCHEMA}"
+    )
     return results
 
 
