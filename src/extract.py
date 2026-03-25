@@ -106,31 +106,44 @@ def _load_to_bronze(df: pd.DataFrame, table_name: str, if_exists: str = "replace
 def extract_products() -> pd.DataFrame:
     """Extract the product catalog from S3 → bronze.products."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
-    df = _read_csv_from_s3(f"{S3_PREFIX}/catalog/products.csv")
-    # print(f"  📦 Products: {len(df)} rows, {len(df.columns)} columns")
-    logger.info(f"  📦 Products: {len(df)} rows, {len(df.columns)} columns")
-    _load_to_bronze(df, "products")
-    return df
+    try : 
+        df = _read_csv_from_s3(f"{S3_PREFIX}/catalog/products.csv")
+        # print(f"  📦 Products: {len(df)} rows, {len(df.columns)} columns")
+        logger.info(f"  📦 Products: {len(df)} rows, {len(df.columns)} columns")
+        _load_to_bronze(df, "products")
+        return df
+    except Exception as e:
+        logger.error(f"Error extracting products: {e}")
+        raise
 
 
 def extract_users() -> pd.DataFrame:
     """Extract users from S3 → bronze.users."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
-    df = _read_csv_from_s3(f"{S3_PREFIX}/users/users.csv")
-    # print(f"  👤 Users: {len(df)} rows, {len(df.columns)} columns")
-    logger.info(f"  👤 Users: {len(df)} rows, {len(df.columns)} columns")
-    _load_to_bronze(df, "users")
-    return df
+    try :
+        df = _read_csv_from_s3(f"{S3_PREFIX}/users/users.csv")
+        # print(f"  👤 Users: {len(df)} rows, {len(df.columns)} columns")
+        logger.info(f"  👤 Users: {len(df)} rows, {len(df.columns)} columns")
+        _load_to_bronze(df, "users")
+        return df
+    except Exception as e:
+        logger.error(f"Error extracting users: {e}")
+        raise
 
 
 def extract_orders() -> pd.DataFrame:
     """Extract orders from S3 → bronze.orders."""
     # TODO (TP3): Replace print with logger.info, add try/except + logger.error + raise
-    df = _read_csv_from_s3(f"{S3_PREFIX}/orders/orders.csv")
-    # print(f"  🛍️ Orders: {len(df)} rows, {len(df.columns)} columns")
-    logger.info(f"  🛍️ Orders: {len(df)} rows, {len(df.columns)} columns")
-    _load_to_bronze(df, "orders")
-    return df
+    try :
+        df = _read_csv_from_s3(f"{S3_PREFIX}/orders/orders.csv")
+        # print(f"  🛍️ Orders: {len(df)} rows, {len(df.columns)} columns")
+        logger.info(f"  🛍️ Orders: {len(df)} rows, {len(df.columns)} columns")
+        _load_to_bronze(df, "orders")
+        return df
+    except Exception as e:
+        logger.error(f"Error extracting orders: {e}")
+        raise
+    
 
 
 def extract_order_line_items() -> pd.DataFrame:
