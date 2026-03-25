@@ -93,3 +93,12 @@ def sample_reviews():
         "comment": ["Great product", "not bad"],
         "review_date": ["2026-02-10", "2026-03-11"]
     })
+
+@pytest.fixture
+def sample_gold_df():
+    """Fake DataFrame mimicking a SQL aggregation result for Gold tests."""
+    return pd.DataFrame({
+        "metric_name": ["Metric A", "Metric B"],
+        "value": [100.0, 250.5],
+        "count": [10, 25]
+    })
