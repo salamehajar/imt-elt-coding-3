@@ -32,7 +32,8 @@ class JSONFormatter(logging.Formatter):
         if record.exc_info and record.exc_info[0] is not None:
             log_entry["exception"] = self.formatException(record.exc_info)
 
-        return json.dumps(log_entry)
+        # we add the ensure_ascii=False argument to allow for proper encoding of non-ASCII characters (like emojis) in the log messages
+        return json.dumps(log_entry, ensure_ascii=False)
 
 
 def get_logger(name: str) -> logging.Logger:
