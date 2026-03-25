@@ -90,3 +90,30 @@ class TestExtractreviews :
         assert len(result) == len(sample_reviews)
         mock_load.assert_called_once()
         pass
+
+class TestExtractErrorHandling:
+    """
+    Tests for error handling (Step 3).
+
+    Here we use side_effect=Exception(...) to simulate a database failure.
+    Instead of returning fake data, mock_read will RAISE an exception.
+    We then verify with pytest.raises() that the exception is propagated.
+    """
+
+    @patch("src.extract._load_to_bronze")
+    @patch("src.extract._read_csv_from_s3", side_effect=Exception("Failed to read from S3"))
+    def test_extract_products_propagates_error(self, mock_read, mock_load):
+        with pytest.raises(Exception, match="Failed to read from S3"):
+            extract_products()
+
+    @patch("src.extract._load_to_bronze")
+    @patch("src.extract._read_csv_from_s3", side_effect=Exception("Failed to read from S3"))
+    def test_extract_users_propagates_error(self, mock_read, mock_load):
+        with pytest.raises(Exception, match="Failed to read from S3"):
+            extract_users()
+
+    @patch("src.extract._load_to_bronze")
+    @patch("src.extract._read_csv_from_s3", side_effect=Exception("Failed to read from S3"))
+    def test_extract_orders_propagates_error(self, mock_read, mock_load):
+        with pytest.raises(Exception, match="Failed to read from S3"):
+            extract_orders()
