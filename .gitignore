@@ -21,6 +21,7 @@ data/
 *.parquet
 *.jsonl
 !requirements.txt
+.coverage
 
 # OS
 .DS_Store
