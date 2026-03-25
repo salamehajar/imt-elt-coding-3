@@ -63,6 +63,9 @@ python pipeline.py
 
 - [Data Presentation](docs/DATA_PRESENTATION.md)
 - [TP1 Instructions](docs/tp1/INSTRUCTIONS.md)
+- [TP2 Instructions](docs/tp2/INSTRUCTIONS.md)
+- [TP3 Instructions](docs/tp3/INSTRUCTIONS.md)
+- [TP4 Instructions](docs/tp4/INSTRUCTIONS.md)
 
 ## ⚙️ Tech Stack
 

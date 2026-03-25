@@ -7,3 +7,4 @@ boto3==1.37.27
 pytest==8.3.5
 pytest-cov==6.0.0
 pytest-mock==3.14.0
+black==26.3.1
