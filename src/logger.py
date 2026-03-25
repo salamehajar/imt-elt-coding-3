@@ -20,20 +20,19 @@ class JSONFormatter(logging.Formatter):
     """
 
     def format(self, record: logging.LogRecord) -> str:
-        # TODO: Build a dictionary with the following keys:
-        #   - "timestamp": current UTC time in ISO format → datetime.now(timezone.utc).isoformat()
-        #   - "level": the log level name → record.levelname
-        #   - "module": the module that logged → record.module
-        #   - "function": the function that logged → record.funcName
-        #   - "message": the log message → record.getMessage()
-        #
-        # Then return json.dumps(log_entry)
-        #
-        # Bonus: if record.exc_info contains an exception, add an "exception" key
-        #   if record.exc_info and record.exc_info[0] is not None:
-        #       log_entry["exception"] = self.formatException(record.exc_info)
 
-        pass  # ← Replace with your implementation
+        log_entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "level": record.levelname,
+            "module": record.module,
+            "function": record.funcName,
+            "message": record.getMessage(),
+        }
+
+        if record.exc_info and record.exc_info[0] is not None:
+            log_entry["exception"] = self.formatException(record.exc_info)
+
+        return json.dumps(log_entry)
 
 
 def get_logger(name: str) -> logging.Logger:
@@ -46,14 +45,18 @@ def get_logger(name: str) -> logging.Logger:
     Returns:
         A configured logging.Logger instance
     """
-    # TODO: Complete the function:
-    #   1. Create a logger: logging.getLogger(name)
-    #   2. Only add a handler if none exist yet (if not logger.handlers:)
-    #      This prevents duplicate log lines if get_logger() is called multiple times
-    #   3. Create a StreamHandler() (outputs to console)
-    #   4. Set its formatter to JSONFormatter()
-    #   5. Add the handler to the logger
-    #   6. Set the logger level to logging.DEBUG
-    #   7. Return the logger
 
-    pass  # ← Replace with your implementation
+    logger = logging.getLogger(name)
+    # We only add a handler if none exist yet
+    # This prevents duplicate log lines if get_logger() is called multiple times
+    if not logger.handlers:
+        # Create a StreamHandler() (outputs to console)
+        handler = logging.StreamHandler()
+        # Set its formatter to JSONFormatter()
+        handler.setFormatter(JSONFormatter())
+        #Add the handler to the logger
+        logger.addHandler(handler)
+        # Set the logger level to logging.DEBUG
+        logger.setLevel(logging.DEBUG)
+
+    return logger
