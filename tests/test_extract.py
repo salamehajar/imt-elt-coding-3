@@ -19,6 +19,7 @@ from src.extract import (
     extract_products,
     extract_users,
     extract_orders,
+    extract_reviews
 )
 
 
@@ -31,9 +32,13 @@ class TestExtractProducts:
         # TODO: Test that extract_products reads from S3 and loads to Bronze
         # Steps:
         #   1. mock_read_csv.return_value = sample_products
+        mock_read_csv.return_value = sample_products
         #   2. result = extract_products()
+        result = extract_products()
         #   3. Assert result has the expected number of rows
+        assert len(result) == len(sample_products)
         #   4. Assert mock_load was called (mock_load.assert_called_once())
+        mock_load.assert_called_once()
         pass
 
     @patch("src.extract._load_to_bronze")
@@ -41,6 +46,9 @@ class TestExtractProducts:
     def test_returns_dataframe(self, mock_read_csv, mock_load, sample_products):
         # TODO: Test that the function returns a pandas DataFrame
         # Hint: isinstance(result, pd.DataFrame)
+        mock_read_csv.return_value = sample_products
+        result = extract_products()
+        assert isinstance(result, pd.DataFrame)
         pass
 
 
@@ -51,6 +59,10 @@ class TestExtractUsers:
     @patch("src.extract._read_csv_from_s3")
     def test_extracts_and_loads(self, mock_read_csv, mock_load, sample_users):
         # TODO: Same pattern as TestExtractProducts
+        mock_read_csv.return_value = sample_users
+        result = extract_users()
+        assert len(result) == len(sample_users)
+        mock_load.assert_called_once()
         pass
 
 
@@ -61,4 +73,20 @@ class TestExtractOrders:
     @patch("src.extract._read_csv_from_s3")
     def test_extracts_and_loads(self, mock_read_csv, mock_load, sample_orders):
         # TODO: Same pattern as TestExtractProducts
+        mock_read_csv.return_value = sample_orders
+        result = extract_orders()
+        assert len(result) == len(sample_orders)
+        mock_load.assert_called_once()
+        pass
+
+class TestExtractreviews : 
+    """Tests for extract_orders()."""
+
+    @patch("src.extract._load_to_bronze")
+    @patch("src.extract._read_jsonl_from_s3")
+    def test_extracts_and_loads(self, mock_read_jsonl, mock_load, sample_reviews):
+        mock_read_jsonl.return_value = sample_reviews
+        result = extract_reviews()
+        assert len(result) == len(sample_reviews)
+        mock_load.assert_called_once()
         pass

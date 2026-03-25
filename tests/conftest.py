@@ -80,3 +80,16 @@ def sample_order_lines():
         "unit_price_usd": [50.0, 100.0],
         "line_total_usd": [100.0, 0.0]
     })
+
+# We add this fixture to have a higher coverage for the file extract.py
+@pytest.fixture
+def sample_reviews():
+    """Fake reviews DataFrame mimicking Bronze data."""
+    return pd.DataFrame({
+        "review_id": [1, 2],
+        "user_id": [1, 2],
+        "product_id": [10, 11],
+        "rating": [5, 3],
+        "comment": ["Great product", "not bad"],
+        "review_date": ["2026-02-10", "2026-03-11"]
+    })
